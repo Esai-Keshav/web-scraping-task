@@ -1,8 +1,11 @@
 from pymongo import MongoClient
 
-client = MongoClient("mongodb://localhost:27017/")
+try:
+    client = MongoClient("mongodb://localhost:27017/")
 
-db = client.db
+    db = client.db
+except:
+    print("Error in DB setup")
 
 
 def insert(database, info):

@@ -2,11 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 from insert_data import insert
 
-
-r = requests.get("https://www.scrapethissite.com/pages/forms/?per_page=600").text
-# 600 content is rendered in a page
-
 data_list = []
+
+try:
+    r = requests.get("https://www.scrapethissite.com/pages/forms/?per_page=600").text
+    # 600 content is rendered in a page
+except:
+    print("Error in Fetching")
 
 
 def collect_data():
