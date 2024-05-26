@@ -25,14 +25,17 @@ pip install -r requirements.txt
 
 Run this command to scrape data 
 
+Link 1:
+
 ```bash 
 python scrap_ajax.py
 ```
+Link 2:
 
 ```bash 
 python scrap_forms.py
 ```
-
+Link 3:
 ```bash 
 python scrap_advanced.py
 ```
