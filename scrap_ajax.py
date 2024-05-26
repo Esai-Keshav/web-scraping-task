@@ -2,13 +2,13 @@ import requests
 import logging
 from insert_data import insert
 
-# Configure logging to write to a file with minimal log messages
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(levelname)s: %(message)s",
     handlers=[
         logging.FileHandler("app.log"),
-        logging.StreamHandler(),  # This will also print to the console
+        logging.StreamHandler(),  
     ],
 )
 
@@ -17,7 +17,7 @@ try:
     r = requests.get(
         "https://www.scrapethissite.com/pages/ajax-javascript/?ajax=true&year=2015"
     )
-    r.raise_for_status()  # This will raise an HTTPError if the HTTP request returned an unsuccessful status code
+    r.raise_for_status()  
     logging.info("Data fetched successfully.")
 except requests.exceptions.RequestException as e:
     logging.error("Error in fetching data: %s", e)

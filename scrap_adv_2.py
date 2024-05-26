@@ -2,13 +2,13 @@ import requests
 import logging
 from bs4 import BeautifulSoup
 
-# Configure logging to write to a file with minimal log messages
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(levelname)s: %(message)s",
     handlers=[
         logging.FileHandler("app.log"),
-        logging.StreamHandler(),  # This will also print to the console
+        logging.StreamHandler(),
     ],
 )
 
@@ -38,9 +38,7 @@ def login():
             logging.info("Login successful.")
             target_response = session.get(target_url, headers=headers)
             logging.info("Fetched target URL after login.")
-            logging.info(
-                "Target response text: %s", target_response.text[:100]
-            )  # Log the first 100 characters
+            logging.info("Target response text: %s", target_response.text[:100])
         else:
             logging.error("Login failed.")
 
@@ -76,9 +74,7 @@ def csrf():
             logging.info("Login successful with CSRF.")
             target_response = session.get(target_url, headers=headers)
             logging.info("Fetched target URL after CSRF login.")
-            logging.info(
-                "Target response text: %s", target_response.text[:100]
-            )  # Log the first 100 characters
+            logging.info("Target response text: %s", target_response.text[:100])
         else:
             logging.error("Login failed with CSRF.")
     except requests.exceptions.RequestException as e:

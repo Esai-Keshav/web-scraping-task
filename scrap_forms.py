@@ -1,15 +1,16 @@
 import requests
 import logging
 from bs4 import BeautifulSoup
+from joblib import Parallel, delayed
 from insert_data import insert
 
-# Configure logging to write to a file with minimal log messages
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(levelname)s: %(message)s",
     handlers=[
         logging.FileHandler("app.log"),
-        logging.StreamHandler(),  # This will also print to the console
+        logging.StreamHandler(),  
     ],
 )
 
@@ -23,17 +24,20 @@ except requests.exceptions.RequestException as e:
     logging.error("Error in fetching data: %s", e)
 
 
+def process_team_info(team_info):
+    team = team_info.find_all("td")
+    return [y.text.strip() for y in team]
+
+
 def collect_data():
     logging.info("Collecting data from the fetched HTML.")
     soup = BeautifulSoup(r, "html.parser")
     data = soup.find("table", {"class": "table"})
 
-    rows = []
-    for team_info in data.find_all("tr"):
-        team = team_info.find_all("td")
-        team_value = [y.text.strip() for y in team]
-        rows.append(team_value)
-
+    
+    rows = Parallel(n_jobs=-1)(
+        delayed(process_team_info)(team_info) for team_info in data.find_all("tr")
+    )
     rows = rows[1:]  # Skip the header row
 
     title = [
@@ -87,7 +91,12 @@ def convert_numeric_fields(record):
 
 try:
     collected_data = collect_data()
-    converted_data = [convert_numeric_fields(record) for record in collected_data]
+
+    logging.info("Starting parallel data conversion.")
+    converted_data = Parallel(n_jobs=-1)(
+        delayed(convert_numeric_fields)(record) for record in collected_data
+    )
+
     logging.info("Data conversion completed.")
     insert("table_2", converted_data)
     logging.info("Data inserted into the table successfully.")

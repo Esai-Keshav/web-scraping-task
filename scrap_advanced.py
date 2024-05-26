@@ -1,13 +1,12 @@
 import requests
 import logging
 
-# Configure logging to write to a file with minimal log messages
 logging.basicConfig(
     level=logging.INFO,
     format="%(levelname)s: %(message)s",
     handlers=[
         logging.FileHandler("app.log"),
-        logging.StreamHandler(),  # This will also print to the console
+        logging.StreamHandler(),
     ],
 )
 
