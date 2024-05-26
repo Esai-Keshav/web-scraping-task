@@ -1,10 +1,20 @@
 import requests
+import logging
+
+# Configure logging to write to a file with minimal log messages
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s",
+    handlers=[
+        logging.FileHandler("app.log"),
+        logging.StreamHandler(),  # This will also print to the console
+    ],
+)
 
 
-# fake headers
+# Fake headers
 def fake_header():
     try:
-
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 11.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
             "Accept-Language": "en-US,en;q=0.9",
@@ -16,14 +26,16 @@ def fake_header():
             "Upgrade-Insecure-Requests": "1",
         }
 
+        logging.info("Sending request with fake headers.")
         response = requests.get(
             "https://www.scrapethissite.com/pages/advanced/?gotcha=headers",
             headers=headers,
         )
+        logging.info("Response received: %s", response.status_code)
         print(response)
 
-    except:
-        print("Error in Header")
+    except requests.exceptions.RequestException as e:
+        logging.error("Error in Header: %s", e)
 
 
 fake_header()

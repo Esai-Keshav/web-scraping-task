@@ -1,19 +1,31 @@
 import requests
+import logging
 from bs4 import BeautifulSoup
 from insert_data import insert
+
+# Configure logging to write to a file with minimal log messages
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s",
+    handlers=[
+        logging.FileHandler("app.log"),
+        logging.StreamHandler(),  # This will also print to the console
+    ],
+)
 
 data_list = []
 
 try:
+    logging.info("Fetching data from the website.")
     r = requests.get("https://www.scrapethissite.com/pages/forms/?per_page=600").text
-    # 600 content is rendered in a page
-except:
-    print("Error in Fetching")
+    logging.info("Data fetched successfully.")
+except requests.exceptions.RequestException as e:
+    logging.error("Error in fetching data: %s", e)
 
 
 def collect_data():
+    logging.info("Collecting data from the fetched HTML.")
     soup = BeautifulSoup(r, "html.parser")
-
     data = soup.find("table", {"class": "table"})
 
     rows = []
@@ -22,7 +34,7 @@ def collect_data():
         team_value = [y.text.strip() for y in team]
         rows.append(team_value)
 
-    rows = rows[1:]
+    rows = rows[1:]  # Skip the header row
 
     title = [
         "Team Name",
@@ -37,15 +49,14 @@ def collect_data():
     ]
 
     for single_row in rows:
-
         final = dict(zip(title, single_row))
         data_list.append(final)
-    # print(data_list)
+
+    logging.info("Data collection completed.")
     return data_list
 
 
 def convert_numeric_fields(record):
-
     int_fields = [
         "Year",
         "Wins",
@@ -70,10 +81,15 @@ def convert_numeric_fields(record):
                 record[field] = float(record[field])
             except ValueError:
                 pass
+
     return record
 
 
-converted_data = [convert_numeric_fields(record) for record in collect_data()]
-
-# print(converted_data)
-insert("table_2", converted_data)
+try:
+    collected_data = collect_data()
+    converted_data = [convert_numeric_fields(record) for record in collected_data]
+    logging.info("Data conversion completed.")
+    insert("table_2", converted_data)
+    logging.info("Data inserted into the table successfully.")
+except Exception as e:
+    logging.error("Error during processing or insertion: %s", e)
