@@ -6,6 +6,8 @@ Install `mongodb` from official website:
 
 https://www.mongodb.com/try/download/community
 
+Use Mongodb Compass to view scraped data. The data wll be stored in `table1` and `table2`(*collection*) under db(*database*)
+
 
 ## Library Used
 
