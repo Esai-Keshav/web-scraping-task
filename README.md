@@ -6,6 +6,14 @@ Install `mongodb` from official website:
 
 https://www.mongodb.com/try/download/community
 
+
+## Library Used
+
+* `joblib` : For parallel processing
+
+* `Beautiful Soup` : For extracting data from HTML 
+
+
 ## Step 1:
 Clone this repo with command
 
