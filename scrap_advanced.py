@@ -32,7 +32,7 @@ def fake_header():
         )
         logging.info("Response received: %s", response.status_code)
         print(response)
-
+        # logging.info(response)
     except requests.exceptions.RequestException as e:
         logging.error("Error in Header: %s", e)
 
