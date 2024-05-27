@@ -8,6 +8,9 @@ https://www.mongodb.com/try/download/community
 
 Use Mongodb Compass to view scraped data. The data wll be stored in `table_1` and `table_2`(*collection*) under db(*database*)
 
+db/
+├── table_1
+└── table_2
 
 ## Library Used
 
